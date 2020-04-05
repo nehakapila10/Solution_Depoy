@@ -1,11 +1,19 @@
-apiVersion: v1
-kind: ReplicationController
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  name: spring-controller
   labels:
     name: springboot
-  name: spring-controller
 spec:
-  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: #Update Pods a certain number at a time
+      maxUnavailable: 1 #Total number of pods that can be unavailable at once
+      maxSurge: 1 #Maximum number of pods that can be deployed above desired state
+  replicas: 2
+  selector:
+    matchLabels:
+      name: springboot
   template:
     metadata:
       labels:
@@ -16,7 +24,7 @@ spec:
         name: springboot
         ports:
         - name: springboot
-          containerPort: 8080      
+          containerPort: 8080
 ---
 # Node Port Service
 apiVersion: v1
@@ -34,14 +42,23 @@ spec:
     name: springboot
 ---
 # Mongo host path rc
-apiVersion: v1
-kind: ReplicationController
+
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  name: mongo-controller
   labels:
     name: mongo
-  name: mongo-controller
 spec:
-  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: #Update Pods a certain number at a time
+      maxUnavailable: 1 #Total number of pods that can be unavailable at once
+      maxSurge: 1 #Maximum number of pods that can be deployed above desired state
+  replicas: 2
+  selector:
+    matchLabels:
+      name: mongo
   template:
     metadata:
       labels:
