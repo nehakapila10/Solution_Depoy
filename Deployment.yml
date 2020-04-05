@@ -55,7 +55,7 @@ spec:
     rollingUpdate: #Update Pods a certain number at a time
       maxUnavailable: 1 #Total number of pods that can be unavailable at once
       maxSurge: 1 #Maximum number of pods that can be deployed above desired state
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       name: mongo
